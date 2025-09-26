@@ -1,0 +1,176 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% How to use writeLaTeX: 
+%
+% You edit the source code here on the left, and the preview on the
+% right shows you the result within a few seconds.
+%
+% Bookmark this page and share the URL with your co-authors. They can
+% edit at the same time!
+%
+% You can upload figures, bibliographies, custom classes and
+% styles using the files menu.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+\usepackage{include/template/sbc-template}
+
+\usepackage{graphicx,url}
+
+%\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc}  
+
+\renewcommand\refname{Referências} % Troca nome da secao de references para referencias
+
+\sloppy
+
+\title{Bibliotecas de Software Livre para Detecção de Esteganografia em Imagens Digitais}
+
+\author{Érico Meger\inst{1}, Eros Henrique Lunardon Andrade\inst{1}, Guilherme Werneck de Oliveira\inst{1}}
+
+
+\address{Campus Pinhais – Instituto Federal do Paraná (IFPR)
+Pinhais - PR - Brasil}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  This meta-paper describes the style to be used in articles and short papers
+  for SBC conferences. For papers in English, you should add just an abstract
+  while for the papers in Portuguese, we also ask for an abstract in
+  Portuguese (``resumo''). In both cases, abstracts should not have more than
+  10 lines and must be in the first page of the paper.
+\end{abstract}
+
+\begin{resumo}
+  Este meta-artigo descreve o estilo a ser usado na confecção de artigos e
+  resumos de artigos para publicação nos anais das conferências organizadas
+  pela SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
+  escritos em português. Artigos em inglês deverão apresentar apenas abstract.
+  Nos dois casos, o autor deve tomar cuidado para que o resumo (e o abstract)
+  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira
+  página do artigo.
+\end{resumo}
+
+\section{Introdução}
+
+O movimento do software livre se estabelece como um paradigma essencial para
+promover transparência, colaboração e inovação no cenário tecnológico
+contemporâneo. Segundo a Free Software Foundation, software livre é definido
+pela sua capacidade de respeitar as liberdades e o controle dos usuários sobre
+o software: a liberdade de executar o programa para qualquer propósito, de
+estudá-lo e modificá-lo (acesso ao código-fonte é pré-requisito), de
+redistribuir cópias e de distribuir versões modificadas para a comunidade,
+conhecidas como as quatro liberdades essenciais \cite{gnu_freesw}.
+
+Ao assegurar essas liberdades, o software livre não apenas fortalece a
+confiança nas soluções digitais, por permitir auditoria e aprendizado mútuo,
+mas também fomenta ambientes colaborativos dinâmicos, onde ferramentas podem
+ser aprimoradas coletivamente. Essa filosofia de abertura e colaboração se
+manifesta também no campo da inteligência artificial, por meio de bibliotecas
+como PyTorch, TensorFlow e scikit-learn. Essas ferramentas de código aberto
+democratizam o acesso a algoritmos de aprendizado de máquina, permitindo
+reprodutibilidade científica, auditoria de modelos e desenvolvimento
+colaborativo de soluções inovadoras \cite{pytorch_about, tensorflow_about}.
+
+No contexto da esteganografia, a disponibilidade dessas bibliotecas open source
+oferece grandes oportunidades para o avanço da área. A análise de imagens digitais,
+por exemplo, pode se beneficiar de recursos de detecção de padrões e
+classificação automática fornecidos por essas ferramentas, auxiliando tanto no
+desenvolvimento de técnicas esteganográficas mais robustas quanto na criação de
+métodos de detecção mais eficazes. Assim, a intersecção entre software livre,
+inteligência artificial e esteganografia evidencia como a filosofia do código
+aberto não só fortalece a confiança técnica, mas também amplia as
+possibilidades de pesquisa e aplicação prática neste campo.
+
+A esteganografia pode ser compreendida como uma técnica utilizada para esconder
+informações em meios aparentemente comuns, de forma que um observador externo
+não consiga identificar a presença de dados ocultos \cite{Fridrich2010}.
+
+Essa área de estudo, portanto, não se limita apenas ao ato de esconder
+informações, mas constitui um campo de estudo mais amplo que abrange técnicas,
+algoritmos e aplicações destinadas a garantir a confidencialidade e a discrição
+da comunicação. Em contraste com a criptografia, que protege o conteúdo das
+mensagens mas não oculta sua existência, a esteganografia busca mascarar o
+próprio ato de comunicação \cite{Fridrich2010}. Essa característica a torna uma
+área estratégica tanto para aplicações legítimas, como autenticação de
+documentos e proteção da privacidade, quanto para usos maliciosos. Tal
+dualidade evidencia que a esteganografia deve ser compreendida não apenas sob
+uma perspectiva técnica, mas também dentro de um contexto social e político
+mais amplo.
+
+Nesse sentido, ao longo da história, e de forma ainda mais acentuada no cenário
+contemporâneo, observa-se o fortalecimento de mecanismos de vigilância e
+controle sobre a comunicação digital. Na Europa, por exemplo, esse movimento se
+materializa tanto em iniciativas de remoção massiva de conteúdos, com mais de
+41 milhões de postagens bloqueadas apenas no primeiro semestre de 2025
+\cite{poder3602025}, quanto em pressões políticas para enfraquecer a segurança
+criptográfica, como a exigência de um backdoor no iCloud, que levou a Apple a
+retirar a opção de criptografia de ponta a ponta de seus serviços no Reino
+Unido \cite{guardian2025}. Embora tais medidas sejam frequentemente
+justificadas em nome da segurança pública, a ausência de transparência sobre os
+critérios de censura e o impacto direto na privacidade digital levantam sérias
+preocupações. Nesse contexto, a esteganografia age como uma alternativa
+tecnológica de resistência, capaz de proporcionar meios de comunicação
+discretos e seguros, reforçando sua relevância sociopolítica e justificando o
+aprofundamento de seu estudo.
+
+\subsection{Objetivo}
+
+Explorar o uso de bibliotecas de software livre no desenvolvimento de modelos de inteligência artificial para a detecção de esteganografia em imagens digitais.
+
+\section{Revisão bibliográfica} \label{sec:firstpage}
+
+\section{Metodologia}
+
+\section{Resultados e discussões}
+
+\section{Conclusão}\label{sec:figs}
+groselha
+groselhagroselha
+
+asdasdasd
+
+asdasdasdasdasdasd
+as
+dasd
+
+\cite{croix2023CNN}
+\cite{fridrich2020imagenet}
+\cite{fridrich2021EfficientNet}
+\cite{LaCroix2024survey}
+\cite{zhang2023survey}
+\cite{fridrichOnehot}
+\cite{chubachi2020cnn}
+\cite{guanshuo2016deep}
+
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=.5\textwidth]{fig1.jpg}
+% \caption{A typical figure}
+% \label{fig:exampleFig1}
+% \end{figure}
+
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=.3\textwidth]{fig2.jpg}
+% \caption{This figure is an example of a figure caption taking more than one
+%   line and justified considering margins mentioned in Section~\ref{sec:figs}.}
+% \label{fig:exampleFig2}
+% \end{figure}
+
+% \begin{table}[ht]
+% \centering
+% \caption{Variables to be considered on the evaluation of interaction
+%   techniques}
+% \label{tab:exTable1}
+% \includegraphics[width=.7\textwidth]{table.jpg}
+% \end{table}
+
+\bibliographystyle{include/template/sbc}
+\bibliography{include/bibliography/bibliography}
+
+\end{document}
