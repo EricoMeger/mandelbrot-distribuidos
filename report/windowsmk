@@ -1,0 +1,10 @@
+function compileTex (){
+    pdflatex --interaction=nonstopmode $1
+    bibtex $(basename $1)
+    pdflatex $(basename $1)
+    pdflatex $(basename $1)
+	rm $(basename $1).{aux,bbl,blg,log,run.xml,toc,snm,out,nav}
+
+
+}
+compileTex $@
