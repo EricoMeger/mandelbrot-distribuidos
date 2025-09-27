@@ -45,7 +45,7 @@ int main() {
                 double z_imag_next = 2.0 * z_real * z_imag + c_imag;
 
                 // se o valor passar de 2 com certeza vai divergir ao infinito
-                if(std::abs(z_real_next) > 2.0 || std::abs(z_imag_next) > 2.0) {
+                if(z_real_next * z_real_next + z_imag_next * z_imag_next > 4.0) {
                     iteration_count[row][col] = k;
                     break;
                 }
