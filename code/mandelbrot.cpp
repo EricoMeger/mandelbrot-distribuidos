@@ -2,13 +2,15 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
-#include <ctime>
+#include <chrono>
 
 int main() {
     int image_height = 1000;
     int image_width = 1000;
 
-    const int max_iterations = 700000;
+    const int max_iterations = 1000;
+    // 650000 iteracoes -> 10min12s
+    // 700000 iteracoes -> 11min20s
     const char* output_filename = "mandelbrot.ppm";
 
     // limites do plano complexo
@@ -24,15 +26,13 @@ int main() {
     std::vector<std::vector<int>> iteration_count(image_height, std::vector<int>(image_width));
 
     timespec ts_start{}, ts_end{};
-    clock_gettime(CLOCK_MONOTONIC, &ts_start);
+    auto start = std::chrono::high_resolution_clock::now();
 
     // calculo do mandelbrot
     for (int row = 0; row < image_height; row++) {
-        // mapeia a coluna de pixels para o y imaignario
         double c_imag = plane_y_min + (row / static_cast<double>(image_height - 1)) * (plane_y_max - plane_y_min);
 
         for (int col = 0; col < image_width; col++) {
-            // mapaeia a coluna de pixels para o x real
             double c_real = plane_x_min + (col / static_cast<double>(image_width - 1)) * (plane_x_max - plane_x_min);
 
             double z_real = c_real;
@@ -66,10 +66,10 @@ int main() {
             }
         }
     }
-
-    clock_gettime(CLOCK_MONOTONIC, &ts_end);
-    double total_time_ns = (ts_end.tv_sec - ts_start.tv_sec) * 1e9 + (ts_end.tv_nsec - ts_start.tv_nsec);
-    std::cout << "\nTotal time: " << total_time_ns / 1e6 << " ms\n";
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    double time_total = std::chrono::duration<double, std::milli>(end - start).count();
+    std::cout << "\nTotal time is " << time_total << " ms\n";
 
     std::ofstream output(output_filename);
     // Header do PPM
@@ -80,10 +80,10 @@ int main() {
     // valor max do pixel
     output << "255\n";
 
+    // R G B R G B... valor de cada pixel
     for (int row = 0; row < image_height; row++) {
         for (int col = 0; col < image_width; col++) {
-            output << red[row][col] << " " << green[row][col] << " " << blue[row][col];
-            if (col < image_width - 1) output << " ";
+            output << red[row][col] << " " << green[row][col] << " " << blue[row][col] << " ";
         }
         output << "\n";
     }
