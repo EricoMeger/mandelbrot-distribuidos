@@ -8,7 +8,7 @@ int main() {
     int image_height = 1000;
     int image_width = 1000;
 
-    const int max_iterations = 20000;
+    const int max_iterations = 700000;
     // 650000 iteracoes -> 10min12s
     // 700000 iteracoes -> 11min20s
     const char* output_filename = "mandelbrot.ppm";

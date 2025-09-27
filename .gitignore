@@ -2,6 +2,12 @@
 mandelbrot
 *.ppm
 
+#latex
+*.aux
+*.bbl
+*.blg
+*.log
+
 # Prerequisites
 *.d
 
