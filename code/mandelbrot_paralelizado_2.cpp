@@ -33,7 +33,7 @@ int main() {
     omp_set_num_threads(THREADS);
 
     // calculo do mandelbrot
-    #pragma omp parallel for schedule(dynamic)
+    #pragma omp parallel for schedule(dynamic, 2)
     for (int row = 0; row < image_height; row++) {
         double c_imag = plane_y_min + (row / static_cast<double>(image_height - 1)) * (plane_y_max - plane_y_min);
         
@@ -53,7 +53,7 @@ int main() {
                 double z_imag_next = 2.0 * z_real * z_imag + c_imag;
 
                 // se o valor passar de 2 com certeza vai divergir ao infinito
-                if(std::abs(z_real_next) > 2.0 || std::abs(z_imag_next) > 2.0) {
+                if(z_real_next * z_real_next + z_imag_next * z_imag_next > 4.0)  {
                     iteration_count[row][col] = k;
                     break;
                 }
