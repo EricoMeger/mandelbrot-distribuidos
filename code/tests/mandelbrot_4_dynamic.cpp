@@ -3,10 +3,15 @@
 #include <vector>
 #include <cmath>
 #include <chrono>
+#include <omp.h>
+
+const uint8_t THREADS = 4;
 
 int main() {
-    int image_height = 1000;
-    int image_width = 1000;
+    const short int image_height = 1000;
+    const short int image_width = 1000;
+
+    std::cout << "running dynamic scheduling with 4 threads" << std::endl;
 
     const int max_iterations = 850000;
     // 650000 iteracoes -> 10min12s
@@ -14,10 +19,10 @@ int main() {
     const char* output_filename = "mandelbrot.ppm";
 
     // limites do plano complexo
-    double plane_x_min = -2.25;
-    double plane_x_max = 1.25;
-    double plane_y_min = -1.75;
-    double plane_y_max = 1.75;
+    float plane_x_min = -2.25;
+    float plane_x_max = 1.25;
+    float plane_y_min = -1.75;
+    float plane_y_max = 1.75;
 
     // matriz de cor e iterações
     std::vector<std::vector<int>> red(image_height, std::vector<int>(image_width));
@@ -25,13 +30,17 @@ int main() {
     std::vector<std::vector<int>> blue(image_height, std::vector<int>(image_width));
     std::vector<std::vector<int>> iteration_count(image_height, std::vector<int>(image_width));
 
-    timespec ts_start{}, ts_end{};
     auto start = std::chrono::high_resolution_clock::now();
 
+    omp_set_num_threads(THREADS);
+
     // calculo do mandelbrot
+    #pragma omp parallel for schedule(dynamic, 2)
     for (int row = 0; row < image_height; row++) {
         double c_imag = plane_y_min + (row / static_cast<double>(image_height - 1)) * (plane_y_max - plane_y_min);
-
+        
+        // esse cara nao faz sentido pararelizar pq gera + overhead
+        // pra cada thread do for externo, cria THREADS pro for interno
         for (int col = 0; col < image_width; col++) {
             double c_real = plane_x_min + (col / static_cast<double>(image_width - 1)) * (plane_x_max - plane_x_min);
 
@@ -40,12 +49,13 @@ int main() {
             iteration_count[row][col] = 0;
 
             // itera z = z^2 + c até divergir ou atingir o maximo de iterações
+            // esse cara nao dá pra paralelizar pq tem dependencia dos externos
             for (int k = 1; k <= max_iterations; k++) {
                 double z_real_next = z_real * z_real - z_imag * z_imag + c_real;
                 double z_imag_next = 2.0 * z_real * z_imag + c_imag;
 
                 // se o valor passar de 2 com certeza vai divergir ao infinito
-                if(z_real_next * z_real_next + z_imag_next * z_imag_next > 4.0) {
+                if(z_real_next * z_real_next + z_imag_next * z_imag_next > 4.0)  {
                     iteration_count[row][col] = k;
                     break;
                 }

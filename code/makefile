@@ -1,6 +1,9 @@
 linear:
-	g++ mandelbrot_linear.cpp -o mandelbrot
+	g++ mandelbrot_linear.cpp -o mandelbrot_linear
 
 threaded:
-	g++ mandelbrot_paralelizado_2.cpp -o mandelbrot -fopenmp
+	g++ mandelbrot_paralelizado.cpp -o mandelbrot_paralelizado -fopenmp
+
+clean:
+	rm -f mandelbrot_linear mandelbrot_paralelizado *.ppm
 
