@@ -1,6 +1,13 @@
 .vscode
 mandelbrot
-*.ppm
+*.ppm 
+
+mandelbrot_2_dynamic 
+mandelbrot_4_dynamic 
+mandelbrot_8_dynamic 
+mandelbrot_2_guided 
+mandelbrot_4_guided 
+mandelbrot_8_guided
 
 #latex
 *.aux
