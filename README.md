@@ -2,6 +2,31 @@
 
 Este projeto implementa e compara versões sequencial e paralela do cálculo do conjunto de Mandelbrot usando OpenMP.
 
+
+## Sumário
+
+- [Parallel Mandelbrot Set](#parallel-mandelbrot-set)
+  - [Sumário](#sumário)
+  - [O que é o Conjunto de Mandelbrot?](#o-que-é-o-conjunto-de-mandelbrot)
+  - [Estratégias de Paralelização](#estratégias-de-paralelização)
+    - [1. Análise Inicial dos Loops](#1-análise-inicial-dos-loops)
+    - [2. Paralelização Básica com OpenMP](#2-paralelização-básica-com-openmp)
+    - [3. Otimização do Scheduling](#3-otimização-do-scheduling)
+    - [4. Otimização de Chunk Size](#4-otimização-de-chunk-size)
+    - [5. Tentativa com Collapse](#5-tentativa-com-collapse)
+    - [6. Divisão em Blocos](#6-divisão-em-blocos)
+    - [7. Estratégia Final](#7-estratégia-final)
+- [Como rodar o projeto](#como-rodar-o-projeto)
+  - [1. Compilação](#1-compilação)
+  - [2. Executar versões](#2-executar-versões)
+  - [3. Executar testes de performance](#3-executar-testes-de-performance)
+  - [Saída do Programa](#saída-do-programa)
+  - [Resultados de Performance](#resultados-de-performance)
+    - [Especificações do Sistema de Teste](#especificações-do-sistema-de-teste)
+    - [Análise dos Resultados](#análise-dos-resultados)
+  - [Estrutura do Projeto](#estrutura-do-projeto)
+  - [Referências](#referências)
+
 ## O que é o Conjunto de Mandelbrot?
 
 O conjunto de Mandelbrot é um fractal matemático definido pela iteração da função complexa:
@@ -87,7 +112,7 @@ for (int row = 0; row < image_height; row++) {
 - Com poucas iterações (10.000-50.000), obtivemos ganho de aproximadamente ~5 segundos. 
 - Em testes com mais de 800.000 iterações, onde o tempo linear supera 10 minutos, o desempenho piorou significativamente, aumentando o tempo de execução em ~1-2 minutos comparado à paralelização sem collapse.
 
-### 6. Divisão em Blocos (Block-based Parallelization)
+### 6. Divisão em Blocos
 
 Por fim, nos inspiramos nas técnicas de divisão de vetores mostradas em aula, e tentamos dividir a imagem em blocos, pensando que pudesse melhorar o desempenho. Validamos com blocos 20x20 e 50x50:
 
