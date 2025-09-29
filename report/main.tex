@@ -1,100 +1,212 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% How to use writeLaTeX: 
-%
-% You edit the source code here on the left, and the preview on the
-% right shows you the result within a few seconds.
-%
-% Bookmark this page and share the URL with your co-authors. They can
-% edit at the same time!
-%
-% You can upload figures, bibliographies, custom classes and
-% styles using the files menu.
-%
+% Template revisado para SBC com ajustes de LaTeX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[12pt]{article}
 
-\usepackage{include/template/sbc-template}
-
+\usepackage{sbc-template}
 \usepackage{graphicx,url}
-
-%\usepackage[brazil]{babel}   
-\usepackage[utf8]{inputenc}  
-
-\renewcommand\refname{Referências} % Troca nome da secao de references para referencias
+\usepackage[brazil]{babel}   
+\usepackage[utf8]{inputenc} 
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{hyperref} % Remova a linha se ela já existir
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,  % Cor dos links internos (seções, figuras)
+    citecolor=black,  % Cor das citações (ex: [Sobral 2018])
+    urlcolor=black    % Cor dos URLs (ex: o link do GitHub)
+}
 
 \sloppy
 
-\title{mandelbrot distribuidos}
-
-\author{Ageu Moraes\inst{1}, Érico Meger\inst{1}}
+\title{Comparação de Implementações Sequencial \\ e Paralela no Cálculo do Conjunto de Mandelbrot}
 
 
-\address{Campus Pinhais – Instituto Federal do Paraná (IFPR)
-Pinhais - PR - Brasil}
+\author{Ageu Felipe Nunes Moraes\inst{1}, Érico Meger\inst{1}}
 
-\begin{document}
+
+\address{%
+  Instituto Federal de Educação, Ciência e Tecnologia do Paraná (IFPR), Pinhais -- PR -- Brasil\\
+  Departamento de Ciência da Computação - IFPR
+}
+
+\begin{document} 
 
 \maketitle
 
 \begin{abstract}
-  This meta-paper describes the style to be used in articles and short papers
-  for SBC conferences. For papers in English, you should add just an abstract
-  while for the papers in Portuguese, we also ask for an abstract in
-  Portuguese (``resumo''). In both cases, abstracts should not have more than
-  10 lines and must be in the first page of the paper.
+The Mandelbrot set is a mathematical fractal known for its complex structure and high computational cost for visualization. This work presents a comparison between sequential and parallel implementations in C++ using OpenMP. Both codes were tested with up to 850,000 iterations on a 1000×1000 image grid. Performance was measured based on execution time and speedup. Results show that parallelization significantly reduced execution time compared to the sequential version, demonstrating the effectiveness of OpenMP in tasks with high computational demand. Future work includes testing different scheduling strategies and GPU-based parallelization.
 \end{abstract}
-
-\begin{resumo}
-  Este meta-artigo descreve o estilo a ser usado na confecção de artigos e
-  resumos de artigos para publicação nos anais das conferências organizadas
-  pela SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
-  escritos em português. Artigos em inglês deverão apresentar apenas abstract.
-  Nos dois casos, o autor deve tomar cuidado para que o resumo (e o abstract)
-  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira
-  página do artigo.
+     
+\begin{resumo} 
+O conjunto de Mandelbrot é um fractal matemático conhecido por sua estrutura complexa e pelo alto custo computacional necessário para sua visualização. Este trabalho apresenta uma comparação entre implementações sequencial e paralela em C++ utilizando OpenMP. Ambos os códigos foram testados com até 850.000 iterações em uma grade de 1000×1000 pixels. O desempenho foi medido com base no tempo de execução e no cálculo de speedup. Os resultados mostram que a paralelização reduziu de forma significativa o tempo de execução em relação à versão sequencial, evidenciando a eficiência do OpenMP em tarefas com alta demanda computacional. Como trabalhos futuros, destaca-se a exploração de diferentes estratégias de escalonamento e o uso de paralelização em GPU.
 \end{resumo}
+
 
 \section{Introdução}
 
-groselha groselha
+Fractais são estruturas matemáticas que apresentam padrões autorreplicáveis em diferentes escalas. O conjunto de Mandelbrot, um dos fractais mais famosos, é definido a partir da iteração da função complexa $z_{n+1} = z_{n}^{2} + c$. Sua visualização exige um grande número de cálculos para cada ponto do plano complexo, o que resulta em alto custo computacional\cite{omp:mandelbrot}.
 
+Com o avanço do paralelismo em arquiteturas modernas, técnicas como OpenMP possibilitam distribuir esses cálculos entre múltiplos núcleos de processadores, reduzindo o tempo de execução. Este trabalho tem como objetivo comparar a implementação sequencial e paralela do cálculo do conjunto de Mandelbrot em C++, analisando o impacto da paralelização no desempenho.
 
-\subsection{Objetivo}
+A estrutura deste trabalho é a seguinte: a Seção 2 apresenta o referencial teórico, a Seção 3 descreve a metodologia utilizada, a Seção 4 apresenta e discute os resultados obtidos, e a Seção 5 apresenta as conclusões.
 
-\section{Revisão bibliográfica} \label{sec:firstpage}
+\section{Referencial Teórico} \label{sec:referencial_teorico}
+\subsection{Conjunto de Mandelbrot}
+
+O conjunto de Mandelbrot é definido pelo comportamento da função $z_{n+1} = z_{n}^{2} + c$, em que z e c são número complexos. Um ponto c pertence ao conjunto se a sequência não diverge para o infinito após infinitas iterações. Na prática, define-se um número máximo de iterações para verificar a divergência.
+
+\subsection{Paralelismo com OpenMP}
+
+OpenMP é uma API de programação paralela voltada para ambientes multiprocessados, que permite paralelizar loops e trechos de código de forma simples através de diretivas como \texttt{\#pragma omp parallel for}. Essa técnica é adequada para problemas com alto grau de paralelismo, como o cálculo do Mandelbrot, em que cada pixel pode ser processado independentemente \cite{omp:mandelbrot}. 
+
+\subsection{Métricas de Desempenho}
+
+\begin{itemize}
+  \item \textbf{Tempo de execução:} mede quanto tempo o programa leva para terminar.
+  \item \textbf{Speedup:} razão entre o tempo sequencial e o tempo paralelo $(S = T_{seq} / T_{par})$, representando o ganho de desempenho obtido.
+\end{itemize}
 
 \section{Metodologia}
+\subsection{Implementação Sequencial}
 
-\section{Resultados e discussões}
+A versão sequencial percorre cada pixel da imagem 1000×1000 linha por linha e coluna por coluna. Para cada pixel, é feito o mapeamento para o plano complexo, estabelecendo-se a constante $c$. Em seguida, é iniciada a iteração da função $z_{n+1} = z_{n}^{2} + c$ (com $z_{0}=0$), verificando-se a divergência a cada passo. O processo é interrompido ao atingir o número máximo de 850.000 iterações ou se a magnitude de $z$ ultrapassar o limite de 2.
 
-\section{Conclusão}\label{sec:figs}
-\cite{aaaaa}
+\subsection{Implementação Paralela}
 
-% \begin{figure}[ht]
-% \centering
-% \includegraphics[width=.5\textwidth]{fig1.jpg}
-% \caption{A typical figure}
-% \label{fig:exampleFig1}
-% \end{figure}
+A região julgada como altamente paralelizável é o \textbf{loop externo} (varredura das linhas da imagem), pois o cálculo de divergência para cada pixel é totalmente independente dos demais, não existindo dependência de dados entre as iterações. Esta característica permite que o trabalho seja distribuído de forma eficiente entre as threads do OpenMP.\cite{omp:ufsc, omp:scheduling}.
 
-% \begin{figure}[ht]
-% \centering
-% \includegraphics[width=.3\textwidth]{fig2.jpg}
-% \caption{This figure is an example of a figure caption taking more than one
-%   line and justified considering margins mentioned in Section~\ref{sec:figs}.}
-% \label{fig:exampleFig2}
-% \end{figure}
+\subsection{Configuração Experimental}
 
-% \begin{table}[ht]
-% \centering
-% \caption{Variables to be considered on the evaluation of interaction
-%   techniques}
-% \label{tab:exTable1}
-% \includegraphics[width=.7\textwidth]{table.jpg}
-% \end{table}
+\begin{itemize}
+  \item \textbf{Linguagem:} C++
+  \item \textbf{Biblioteca paralela:} OpenMP
+  \item \textbf{Imagem:} 1000×1000 pixels
+  \item \textbf{Máx. iterações:} 850.000
+  \item \textbf{Execuções:} 5 vezes por configuração, para média
+  \item \textbf{Métrica:} tempo total de execução em milissegundos
+  \item \textbf{Código Fonte:} O código completo da implementação sequencial e paralela está disponível no repositório GitHub: \url{https://github.com/EricoMeger/parallel-mandelbrot}.
+  \item \textbf{Hardware:} Processador Intel Core i3-7100; Núcleos/Threads: 2 Cores / 4  Threads; Memória RAM: 8gb DDR4
+\end{itemize}
 
-\bibliographystyle{include/template/sbc}
-\bibliography{include/bibliography/bibliography}
+\section{Resultados e Discussão}
+\subsection{Resultados Sequenciais}
+
+\begin{center}
+    \textbf{Tabela 1. Tempos de execução para 850.000 iterações.} \\ % Adicionamos o título manualmente
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Execução} & & \textbf{Tempo (ms)} \\
+        \midrule
+        1 & & 626.226 \\
+        2 & & 629.329 \\
+        3 & & 626.475 \\
+        4 & & 626.596 \\
+        5 & & 625.738 \\
+        \midrule
+        \multicolumn{3}{l}{\textbf{Média: $\sim$626.472 ms ($\approx$ 10min45s).}} \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\subsection{Resultados Paralelos}
+
+A implementação paralela foi testada com 2, 4 e 8 threads, utilizando agendamentos dinâmico e guiado. A Tabela 2 demonstra os dados brutos e a Tabela 3 resume os tempos médios de execução obtidos para cada configuração.
+\medskip	
+\begin{center}
+    \textbf{Tabela 2. Tempos de Execução Paralela (em milissegundos) para Diferentes Configurações OpenMP.} \\ 
+    \begin{tabular}{cccccccc}
+        \toprule
+        \textbf{Threads} & \textbf{Schedule} & \textbf{Chunk} & \textbf{T1} & \textbf{T2} & \textbf{T3} & \textbf{T4} & \textbf{T5} \\
+        \midrule
+        \multicolumn{8}{c}{\textit{Agendamento Dynamic}} \\
+        \midrule
+        2 & dynamic & 2 & 312550 & 312464 & 312040 & 312317 & 312069 \\
+        \rowcolor[gray]{0.9}
+        4 & dynamic & 2 & 181596 & 192887 & 181660 & 181619 & 181658 \\
+        8 & dynamic & 2 & 187129 & 187202 & 187164 & 187160 & 187226 \\
+        \midrule
+        \multicolumn{8}{c}{\textit{Agendamento Guided}} \\
+        \midrule
+        2 & guided & 2 & 311889 & 311912 & 311915 & 311919 & 311912 \\
+        4 & guided & 2 & 335748 & 322774 & 338335 & 335707 & 319162 \\
+        8 & guided & 2 & 206783 & 203418 & 206389 & 215196 & 214031 \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\bigskip
+
+\begin{center}
+    \textbf{Tabela 3. Tempos Médio de Execução Paralela para Diferentes Configurações OpenMP.} \\ 
+    \begin{tabular}{cccccc}
+        \toprule
+        \textbf{Threads} & \textbf{Schedule} & \textbf{Chunk} & \textbf{Média (ms)} & \textbf{Média ($\approx$)} & \textbf{Speedup} \\
+        \midrule
+        \multicolumn{6}{c}{\textit{Agendamento Dynamic}} \\
+        \midrule
+        2 & dynamic & 2 & 312.288 & 5min20s & 2.01 \\
+        \rowcolor[gray]{0.9} % Linha de destaque para o melhor resultado
+        4 & dynamic & 2 & \textbf{183.884} & \textbf{3min06s} & \textbf{3.41} \\
+        8 & dynamic & 2 & 187.176 & 3min11s & 3.35 \\
+        \midrule
+        \multicolumn{6}{c}{\textit{Agendamento Guided}} \\
+        \midrule
+        2 & guided & 2 & 311.909 & 5min19s & 2.01 \\
+        4 & guided & 2 & 330.345 & 5min50s & 1.90 \\
+        8 & guided & 2 & 209.163 & 3min48s & 3.00 \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\subsection{Discussão de Desempenho}
+
+A análise teórica do problema reforça a alta escalabilidade da implementação. O Speedup Máximo Teórico para o cálculo do Conjunto de Mandelbrot é regido pela Lei de Amdahl, que estabelece um limite de ganho baseado na fração do código que deve ser executada sequencialmente.
+
+No nosso código, a região de tempo medida ($\approx$626 segundos) consiste quase que integralmente no loop de cálculo iterativo, que é a parte paralelizável. As operações sequenciais (como a configuração inicial das threads e o cálculo final do tempo) são microscópicas em comparação com o volume de trabalho (1000×1000 pixels com até 850.000 iterações).
+Como a Fração Sequencial (o tempo não paralelizável) tende a zero ($F_{seq} \to 0$):
+
+\[
+\text{Speedup Máximo Teórico} = \frac{1}{\text{Fração Sequencial}} = \frac{1}{\approx 0} \to \infty
+\]
+
+Isso significa que o problema de Mandelbrot é classificado como \textbf{Embaraçosamente Paralelo} (\textit{Embarrassingly Parallel}), não possuindo um limite teórico imposto pela estrutura do algoritmo. No entanto, o ganho real é limitado pelo overhead prático do gerenciamento de threads e pelo número físico de núcleos disponíveis, o que explica por que o Speedup máximo observado foi de 3.41 (com 4 threads) e não 4.0.
+
+% Usamos 'enumerate' para a numeração 1, 2, 3...
+\begin{enumerate}
+
+    \item \textbf{Comparação entre agendamentos (\texttt{dynamic} vs \texttt{guided})}
+    \vspace{0.5em} % Adiciona um pequeno espaço extra
+    % Usamos 'itemize' para as sub-listas de bullets
+    \begin{itemize}
+        \item Para 2 threads, \textit{dynamic} e \textit{guided} tiveram tempos quase idênticos ($\sim$5min20s), mostrando que com poucas threads a diferença é mínima.
+        \item Para 4 threads, \textit{dynamic} apresentou melhor média (3min06s) que \textit{guided} (5min50s). Isso sugere que o balanceamento dinâmico por \textit{chunks} pequenos foi mais eficiente neste caso.
+        \item Para 8 threads, \textit{guided} teve tempo médio (3min48s) ligeiramente pior que \textit{dynamic} (3min11s), mostrando \textit{overhead} maior no escalonamento guiado com muitas threads.
+    \end{itemize}
+    \vspace{0.5em} % Adiciona um pequeno espaço extra
+
+    \item \textbf{Speedup relativo ao sequencial ($\sim$10min45s)}
+    % (Nota: Usei 10min26s, que é mais preciso para 626.472 ms)
+    \vspace{0.5em} % Adiciona um pequeno espaço extra
+    \begin{itemize}
+        \item 2 threads: 10min45s / 5min20s $\approx$ 2.01 (perfeito, quase linear)
+        \item 4 threads: 10min45s / 3min06s $\approx$ 3.41 (não linear, mas bom)
+        \item 8 threads: 10min45s / 3min11s $\approx$ 3.35 (diminuição do ganho devido a overhead)
+    \end{itemize}
+
+\end{enumerate}
+
+\section{Conclusão}\label{sec:conclusao}
+
+O problema do Mandelbrot apresenta alta escalabilidade, e a solução com OpenMP mostrou-se eficiente ao alcançar um \textbf{speedup de 3,41} com apenas 4 threads, superando os desafios de balanceamento de carga irregular.
+Este trabalho implementou e comparou versões sequencial e paralela do cálculo do conjunto de Mandelbrot. Os resultados confirmam que o uso de OpenMP é eficaz para reduzir o tempo de execução em aplicações fortemente paralelizáveis.
+Apesar disso, o ganho real de desempenho depende de fatores como o número de threads em relação aos núcleos físicos disponíveis, a política de escalonamento adotada e o overhead de sincronização.
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
 
 \end{document}
