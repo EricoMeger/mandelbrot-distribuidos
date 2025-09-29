@@ -1,7 +1,6 @@
 .vscode
 mandelbrot_linear
 mandelbrot_paralelizado
-*.ppm 
 
 mandelbrot_2_dynamic 
 mandelbrot_4_dynamic 
