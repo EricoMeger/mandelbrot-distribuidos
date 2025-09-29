@@ -67,7 +67,7 @@ $ make 4_guided     # 4 threads com scheduling guiado
 
 ## Saída do Programa
 
-O programa gera uma imagem do conjunto de Mandelbrot no formato PPM (1000×1000 pixels). Quanto mais iterações utilizadas, mais definidas e suaves ficam as bordas do conjunto, revelando os fractais.
+O programa gera uma imagem do conjunto de Mandelbrot no formato PPM (1000×1000 pixels). Quanto mais iterações utilizadas, mais definidas e suaves ficam as bordas do conjunto.
 
 ------- adicioanr imagem
 
