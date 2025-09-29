@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 
-\usepackage{sbc-template}
+\usepackage{include/template/sbc-template}
 \usepackage{graphicx,url}
 \usepackage[brazil]{babel}   
 \usepackage[utf8]{inputenc} 
@@ -201,7 +201,7 @@ O problema do Mandelbrot apresenta alta escalabilidade, e a solução com OpenMP
 Este trabalho implementou e comparou versões sequencial e paralela do cálculo do conjunto de Mandelbrot. Os resultados confirmam que o uso de OpenMP é eficaz para reduzir o tempo de execução em aplicações fortemente paralelizáveis.
 Apesar disso, o ganho real de desempenho depende de fatores como o número de threads em relação aos núcleos físicos disponíveis, a política de escalonamento adotada e o overhead de sincronização.
 
-\bibliographystyle{sbc}
-\bibliography{sbc-template}
+\bibliographystyle{include/template/sbc}
+\bibliography{include/bibliography/bibliography}
 
 \end{document}
