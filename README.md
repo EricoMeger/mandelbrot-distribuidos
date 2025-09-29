@@ -14,9 +14,106 @@ Onde `z` e `c` são números complexos. Um ponto `c` pertence ao conjunto se a s
 
 A visualização do conjunto de Mandelbrot requer cálculos intensivos para cada pixel da imagem, tornando-se um excelente caso de uso para demonstrar técnicas de paralelização, já que cada pixel pode ser calculado independentemente.
 
-## Estratégias para paralelizar
+## Estratégias de Paralelização
 
-asfsdgsdgsdg
+Nós exploramos algumas abordagens para paralelizar o cálculo do conjunto Mandelbrot. Analisamos que o gargalo computacional está no triplo loop aninhado (linhas 33-65), onde cada pixel requer até 850.000 iterações da fórmula complexa.
+
+### 1. Análise Inicial dos Loops
+
+```cpp
+// Loop externo, linhas da imagem (PARALELIZÁVEL)
+for (int row = 0; row < image_height; row++) {
+    // Loop intermediário, colunas da imagem (OVERHEAD > GANHO)
+    for (int col = 0; col < image_width; col++) {
+        // Loop interno, iterações do Mandelbrot (DEPENDÊNCIA SEQUENCIAL)
+        for (int k = 1; k <= max_iterations; k++) {
+            // resto do código
+        }
+    }
+}
+```
+- **Loop externo** (linhas): Ideal para paralelização (cada linha é independente)
+- **Loop intermeddiário** (colunas): Paralelizável, mas overhead > benefício (o custo de gerenciar threads supera o ganho de paralelizar os 1000 pixels)
+- **Loop interno** (iterações): **Impossível paralelizar**, cada iteração depende da anterior.
+
+### 2. Paralelização Básica com OpenMP
+
+Primeiro tentamos um simples `#pragma omp parallel for` no loop externo, para validar nossas observações:
+
+```cpp
+#pragma omp parallel for
+for (int row = 0; row < image_height; row++) {
+    // resto do código
+}
+```
+
+**Resultado:** Speedup significativo, confirmando que esta é a estratégia correta.
+
+### 3. Otimização do Scheduling
+
+Testamos diferentes estratégias de escalonamento devido à carga desequilibrada do Mandelbrot (pixels próximos às bordas convergem mais rápido):
+
+- **`schedule(static)`**: Divisão fixa; Justamente pela carga desequilibrada não era uma boa opção, já que threads ficavam ociosas
+- **`schedule(dynamic)`**: Redistribuição dinâmica; Diferentemente do static, assim que uma thread termina o que ela estava fazendo, ela pega mais trabalho, foi o melhor approach em altas iterações
+- **`schedule(guided)`**: Chunks adaptativos; O guided divide um grande número de iterações entre as threads inicialmente e depois vai reduzindo esse número, trás um bom balanceamento inicial, mas não trouxe mais performance nos nossos testes
+
+**Descoberta:** Com 850.000 iterações, `dynamic` superou significativamente `guided` devido à redistribuição constante do trabalho.
+
+### 4. Otimização de Chunk Size
+
+Uma vez que validamos o uso do schedule, testamos alguns tamanhos de chunk (quantidade de iterações que a thread vai pegar, no caso do Dynamic, e mínimo de iterações, no caso do Guided) para `schedule(dynamic, X)`:
+
+| Chunk Size | Tempo | Observação |
+|------------|-------|------------|
+| 1 (default) | Baseline | Balanceamento máximo, overhead alto |
+| **2** | **~-2s** | **Melhor resultado** |
+| 4 | ~+0.5s | Um pouco pior |
+| 8, 16, 100 | ~+1-3s | Overhead crescente |
+
+### 5. Tentativa com Collapse
+
+Uma vez que o schedule estava validado, tentamos ir para outros caminhos: adaptamos o código e experimentamos `collapse(2)` para paralelizar ambos os loops externos simultaneamente:
+
+```cpp
+#pragma omp parallel for schedule(dynamic) collapse(2)
+for (int row = 0; row < image_height; row++) {
+    for (int col = 0; col < image_width; col++) {
+        // resto do código
+    }
+}
+```
+
+**Resultado:** 
+- Com poucas iterações (10.000-50.000), obtivemos ganho de aproximadamente ~5 segundos. 
+- Em testes com mais de 800.000 iterações, onde o tempo linear supera 10 minutos, o desempenho piorou significativamente, aumentando o tempo de execução em ~1-2 minutos comparado à paralelização sem collapse.
+
+### 6. Divisão em Blocos (Block-based Parallelization)
+
+Por fim, nos inspiramos nas técnicas de divisão de vetores mostradas em aula, e tentamos dividir a imagem em blocos, pensando que pudesse melhorar o desempenho. Validamos com blocos 20x20 e 50x50:
+
+```cpp
+#pragma omp parallel for schedule(dynamic)
+for (int block_row = 0; block_row < image_height; block_row += 50) {
+    for (int block_col = 0; block_col < image_width; block_col += 50) {
+        // resto do código, com os for's limitados a block_row e block_col, ao invés de image_height e image_width
+    }
+}
+```
+
+**Resultado:** Performance neutra (nem melhorou, nem piorou)
+
+### 7. Estratégia Final
+
+A melhor configuração que encontramos foi:
+
+```cpp
+#pragma omp parallel for schedule(dynamic, 2)
+for (int row = 0; row < image_height; row++) {
+    // resto do código
+}
+```
+
+Esta abordagem resultou em speedup de 3.41x com 4 threads (de 10min44s para 3min06s).
 
 # Como rodar o projeto
 
