@@ -92,7 +92,7 @@ A região julgada como altamente paralelizável é o \textbf{loop externo} (varr
 \subsection{Resultados Sequenciais}
 
 \begin{center}
-    \textbf{Tabela 1. Tempos de execução para 850.000 iterações.} \\ % Adicionamos o título manualmente
+    \textbf{Tabela 1. Tempos de execução para 850.000 iterações.} \\
     \begin{tabular}{lcc}
         \toprule
         \textbf{Execução} & & \textbf{Tempo (ms)} \\
@@ -182,11 +182,11 @@ Isso significa que o problema de Mandelbrot é classificado como \textbf{Embara�
         \item Para 4 threads, \textit{dynamic} apresentou melhor média (3min06s) que \textit{guided} (5min50s). Isso sugere que o balanceamento dinâmico por \textit{chunks} pequenos foi mais eficiente neste caso.
         \item Para 8 threads, \textit{guided} teve tempo médio (3min48s) ligeiramente pior que \textit{dynamic} (3min11s), mostrando \textit{overhead} maior no escalonamento guiado com muitas threads.
     \end{itemize}
-    \vspace{0.5em} % Adiciona um pequeno espaço extra
+    \vspace{0.5em}
 
     \item \textbf{Speedup relativo ao sequencial ($\sim$10min45s)}
-    % (Nota: Usei 10min26s, que é mais preciso para 626.472 ms)
-    \vspace{0.5em} % Adiciona um pequeno espaço extra
+
+    \vspace{0.5em} 
     \begin{itemize}
         \item 2 threads: 10min45s / 5min20s $\approx$ 2.01 (perfeito, quase linear)
         \item 4 threads: 10min45s / 3min06s $\approx$ 3.41 (não linear, mas bom)
