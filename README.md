@@ -26,6 +26,7 @@ Este projeto implementa e compara versões sequencial e paralela do cálculo do 
     - [Análise dos Resultados](#análise-dos-resultados)
   - [Estrutura do Projeto](#estrutura-do-projeto)
   - [Referências](#referências)
+  - [Autores](#autores)
 
 ## O que é o Conjunto de Mandelbrot?
 
