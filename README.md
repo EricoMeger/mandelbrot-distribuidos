@@ -247,3 +247,6 @@ Os benchmarks foram executados no seguinte hardware:
 - [OpenMP API 6.0 Reference Guide](https://www.openmp.org/wp-content/uploads/OpenMP-RefGuide-6.0-OMP60SC24-web.pdf)
 - [OpenMP Dynamic vs Guided Scheduling](https://stackoverflow.com/questions/42970700/openmp-dynamic-vs-guided-scheduling)
 
+## Autores
+Este trabalho foi desenvolvido por Ageu Felipe Nunes Moraes e Érico Meger.
+
